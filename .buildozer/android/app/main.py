@@ -14,41 +14,40 @@ from kivymd.app import MDApp
 from chat_ui.config import Config
 
 # Configure environment variables before any Kivy imports
-os.environ['KIVY_NO_CONSOLELOG'] = '1'  # Reduce console logging
-os.environ['KIVY_LOG_LEVEL'] = 'critical'  # Only critical errors
+os.environ['KIVY_NO_CONSOLELOG'] = '0'  # Enable console logging for debugging
+os.environ['KIVY_LOG_LEVEL'] = 'info'  # Show info level logs
 os.environ['KIVY_NO_FILELOG'] = '1'  # Disable file logging completely
 os.environ['KIVY_NO_ARGS'] = '1'  # Don't process command line arguments
 
-# Configure logging for production use
+# Configure logging for debugging
 def configure_logging():
-    """Configure logging levels for clean production output"""
-    # Set root logger to WARNING level to reduce verbosity
-    logging.basicConfig(level=logging.WARNING, format='%(levelname)s: %(message)s')
+    """Configure logging levels for debugging"""
+    # Set root logger to INFO level to see more details
+    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     
-    # Suppress verbose WebSocket debug logs
+    # Keep WebSocket logs at ERROR level to reduce noise
     logging.getLogger("websockets").setLevel(logging.ERROR)
     logging.getLogger("websockets.protocol").setLevel(logging.ERROR)
     logging.getLogger("websockets.client").setLevel(logging.ERROR)
     logging.getLogger("websockets.server").setLevel(logging.ERROR)
     
-    # Suppress asyncio debug messages (like selector messages)
+    # Keep asyncio at ERROR level
     logging.getLogger("asyncio").setLevel(logging.ERROR)
     
-    # Suppress Kivy verbose logs completely
-    logging.getLogger("kivy").setLevel(logging.ERROR)
+    # Allow Kivy logs for debugging
+    logging.getLogger("kivy").setLevel(logging.INFO)
     
-    # Completely suppress KivyMD warnings
-    warnings.simplefilter("ignore")  # Suppress ALL warnings
+    # Allow KivyMD logs for debugging
+    warnings.simplefilter("ignore")  # Suppress warnings but keep logs
     
     # Specifically target deprecation warnings
     warnings.filterwarnings("ignore", category=DeprecationWarning)
     warnings.filterwarnings("ignore", category=FutureWarning)
     warnings.filterwarnings("ignore", category=UserWarning)
     
-    # Target KivyMD specifically
+    # Allow KivyMD logging for debugging
     kivymd_logger = logging.getLogger("kivymd")
-    kivymd_logger.setLevel(logging.CRITICAL)  # Only critical errors
-    kivymd_logger.disabled = True  # Completely disable KivyMD logging
+    kivymd_logger.setLevel(logging.INFO)  # Show KivyMD info logs
 
 
 # Configure Kivy settings before importing UI modules
@@ -61,7 +60,7 @@ def configure_kivy():
     KivyConfig.set('graphics', 'minimum_height', str(Config.MIN_HEIGHT))
     
     # Performance optimizations
-    KivyConfig.set('kivy', 'log_level', 'critical')  # Only critical errors
+    KivyConfig.set('kivy', 'log_level', 'info')  # Show info level logs
     KivyConfig.set('graphics', 'vsync', '1')  # Enable vsync for smoother rendering
     KivyConfig.set('graphics', 'multisamples', '0')  # Disable multisampling for better performance
     
@@ -77,11 +76,19 @@ def configure_kivy():
 configure_logging()
 configure_kivy()
 
-from chat_ui.modern_chat import ModernChatScreen
+# Add better error handling for imports
+try:
+    from chat_ui.modern_chat import ModernChatScreen
+    print("✅ Successfully imported ModernChatScreen")
+except Exception as e:
+    print(f"❌ Failed to import ModernChatScreen: {e}")
+    import traceback
+    traceback.print_exc()
+    sys.exit(1)
 
 # Additional Kivy logger configuration after imports
 from kivy import Logger as KivyLogger
-KivyLogger.setLevel(logging.CRITICAL)  # Completely suppress Kivy logs
+KivyLogger.setLevel(logging.INFO)  # Show Kivy logs for debugging
 
 
 class ChatApp(MDApp):
@@ -92,7 +99,7 @@ class ChatApp(MDApp):
     - Material Design 3 theming
     - Optimized performance settings
     - Clean error handling
-    - Minimal logging output
+    - Debug logging output
     """
     
     def build(self):
@@ -103,9 +110,12 @@ class ChatApp(MDApp):
         self.theme_cls.material_style = "M3"
         
         try:
-            return ModernChatScreen()
+            print("🔨 Building ModernChatScreen...")
+            screen = ModernChatScreen()
+            print("✅ ModernChatScreen built successfully")
+            return screen
         except Exception as e:
-            print(f"Failed to initialize chat interface: {e}")
+            print(f"❌ Failed to initialize chat interface: {e}")
             import traceback
             traceback.print_exc()
             sys.exit(1)
@@ -129,6 +139,7 @@ class ChatApp(MDApp):
 def main():
     """Main entry point with error handling"""
     try:
+        print("🚀 Starting ChatApp...")
         ChatApp().run()
     except KeyboardInterrupt:
         print("\n👋 Application interrupted by user")
