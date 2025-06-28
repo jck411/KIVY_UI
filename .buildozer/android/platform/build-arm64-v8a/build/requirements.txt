@@ -1,2 +1,1 @@
-asyncgui
 https://github.com/kivymd/kivymd/archive/master.zip

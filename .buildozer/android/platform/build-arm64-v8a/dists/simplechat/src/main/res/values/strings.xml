@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Simple Chat</string>
-    <string name="private_version">ea9e8c8d68d3b2da11b62e297a9ee8b09ad0466a</string>
+    <string name="private_version">2975c9056744d670ae546a8e3db9cc2fb5351885</string>
     <string name="presplash_color">#000000</string>
     <string name="urlScheme">kivy</string>
 </resources>

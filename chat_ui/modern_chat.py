@@ -5,6 +5,7 @@ import threading
 import time
 from kivy.clock import Clock
 from kivy.metrics import dp
+from kivy.core.window import Window
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDCard
@@ -77,6 +78,9 @@ class ModernChatScreen(MDScreen):
         self.backend_available = False
         self.scroll_view = None
         self.connection_monitor_task = None
+        
+        # Configure keyboard behavior for Android
+        Window.softinput_mode = 'below_target'  # Makes input stay above keyboard
         
         # Performance optimization variables
         self._scroll_scheduled = False
@@ -221,7 +225,8 @@ class ModernChatScreen(MDScreen):
             size_hint_y=None,
             height=Sizes.BUTTON_SIZE,
             radius=[dp(24)],
-            on_text_validate=self.send_message
+            on_text_validate=self.send_message,
+            on_focus=self._on_input_focus
         )
         
         self.send_btn = MDFabButton(
@@ -405,6 +410,15 @@ class ModernChatScreen(MDScreen):
     def _focus_input(self):
         """Focus the text input field"""
         self.text_input.focus = True
+    
+    def _on_input_focus(self, instance, focus):
+        """Handle input focus events for keyboard management"""
+        if focus:
+            # When input gets focus, ensure it's visible above keyboard
+            Clock.schedule_once(lambda dt: self._scroll_to_bottom(force=True), 0.1)
+        else:
+            # When input loses focus, scroll to bottom to show all content
+            Clock.schedule_once(lambda dt: self._scroll_to_bottom(force=True), 0.1)
     
     def _cleanup_old_messages(self):
         """Remove old messages to prevent memory bloat during long conversations"""
