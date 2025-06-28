@@ -9,6 +9,8 @@
             </fileset>
             
             
+            <fileset dir="/home/human/AAREPOS/KIVY_UI/java" includes="**" />
+            
         </copy>
     </target>
     <target name="-post-build">

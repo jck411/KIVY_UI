@@ -3,7 +3,7 @@ Modern 2025 Chat Interface - Optimized for production use
 """
 import threading
 import time
-from kivy.clock import Clock
+from kivy.clock import Clock, mainthread
 from kivy.metrics import dp
 from kivy.core.window import Window
 from kivymd.uix.screen import MDScreen
@@ -17,6 +17,13 @@ from kivymd.uix.scrollview import MDScrollView
 from chat_ui.websocket_client import ChatWebSocketClient, ConnectionState
 from chat_ui.theme import Colors, Sizes, Spacing, Layout
 from chat_ui.config import Config, Messages
+
+# Import STT only when on Android platform
+try:
+    from chat_ui.android_stt import SpeechToText, ANDROID_AVAILABLE
+    STT_AVAILABLE = ANDROID_AVAILABLE
+except ImportError:
+    STT_AVAILABLE = False
 
 
 class ModernBubble(MDCard):
@@ -229,6 +236,17 @@ class ModernChatScreen(MDScreen):
             on_focus=self._on_input_focus
         )
         
+        # Add microphone button if STT is available (Android only)
+        if STT_AVAILABLE:
+            self.mic_btn = MDFabButton(
+                icon="microphone",
+                theme_bg_color="Custom",  # Required for KivyMD 2.0+
+                md_bg_color=Colors.PRIMARY_BLUE,
+                size_hint=(None, None),
+                size=(Sizes.BUTTON_SIZE, Sizes.BUTTON_SIZE),
+                on_release=self._toggle_voice
+            )
+        
         self.send_btn = MDFabButton(
             icon="send",
             theme_bg_color="Custom",  # Required for KivyMD 2.0+
@@ -239,6 +257,8 @@ class ModernChatScreen(MDScreen):
         )
         
         input_box.add_widget(self.text_input)
+        if STT_AVAILABLE:
+            input_box.add_widget(self.mic_btn)
         input_box.add_widget(self.send_btn)
         input_card.add_widget(input_box)
         
@@ -440,3 +460,96 @@ class ModernChatScreen(MDScreen):
             current_text = self.current_bubble.label.text
             self.current_bubble.update_text(current_text + text)
             self._scroll_to_bottom() 
+    
+    # ========== STT Integration Methods ==========
+    
+    def _toggle_voice(self, *a):
+        """Toggle voice recording on/off with debouncing"""
+        print("UI: _toggle_voice() called")
+        
+        # Debouncing: ignore rapid button presses
+        current_time = time.time()
+        last_press_time = getattr(self, '_last_mic_press', 0)
+        if current_time - last_press_time < 0.5:  # 500ms debounce
+            print("UI: Button press ignored (debouncing)")
+            return
+        self._last_mic_press = current_time
+        
+        if not STT_AVAILABLE:
+            print("UI: STT not available")
+            return
+            
+        try:
+            if not hasattr(self, "_stt"):
+                print("UI: Creating new STT instance")
+                self._stt = SpeechToText(self._on_partial, self._on_voice_done)
+                
+            # Check actual STT state instead of just UI state
+            is_listening = getattr(self._stt, 'is_listening', False)
+            ui_voice_on = getattr(self, "_voice_on", False)
+            
+            print(f"UI: is_listening={is_listening}, ui_voice_on={ui_voice_on}")
+                
+            if is_listening or ui_voice_on:
+                # Stop recording
+                print("UI: Stopping STT")
+                self._stt.stop()
+                self._voice_on = False
+                if hasattr(self, 'mic_btn'):
+                    self.mic_btn.icon = "microphone"
+                print("UI: STT stopped, button reset to microphone")
+            else:
+                # Start recording - this will now request permission first
+                print("UI: Starting STT")
+                self._stt.start()
+                self._voice_on = True
+                if hasattr(self, 'mic_btn'):
+                    self.mic_btn.icon = "stop"
+                print("UI: STT started, button changed to stop")
+        except Exception as e:
+            print(f"UI: STT Error in _toggle_voice: {e}")
+            import traceback
+            traceback.print_exc()
+            # Reset to safe state
+            self._voice_on = False
+            if hasattr(self, 'mic_btn'):
+                self.mic_btn.icon = "microphone"
+            if hasattr(self, '_stt'):
+                self._stt.is_listening = False
+
+    @mainthread
+    def _on_partial(self, txt):
+        """Handle partial speech recognition results"""
+        print(f"UI: _on_partial called with: '{txt}'")
+        try:
+            if txt and txt.strip():
+                self.text_input.text = txt
+                print(f"UI: Text input updated to: '{txt}'")
+        except Exception as e:
+            print(f"UI: Error in _on_partial: {e}")
+
+    @mainthread
+    def _on_voice_done(self, txt):
+        """Handle final speech recognition result and send message"""
+        print(f"UI: _on_voice_done called with: '{txt}'")
+        try:
+            # Reset voice state
+            self._voice_on = False
+            if STT_AVAILABLE and hasattr(self, 'mic_btn'):
+                self.mic_btn.icon = "microphone"
+                print("UI: Reset mic button to microphone")
+            
+            if hasattr(self, '_stt'):
+                self._stt.is_listening = False
+                print("UI: Reset STT listening state")
+            
+            if txt and txt.strip():
+                self.text_input.text = txt
+                print(f"UI: Text input set to: '{txt}', sending message")
+                self.send_message(None)
+            else:
+                print("UI: Empty text received, not sending message")
+        except Exception as e:
+            print(f"UI: Error in _on_voice_done: {e}")
+            import traceback
+            traceback.print_exc()

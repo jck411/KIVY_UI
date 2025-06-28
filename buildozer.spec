@@ -37,7 +37,8 @@ version = 0.1.0
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.3.1,https://github.com/kivymd/KivyMD/archive/master.zip,websockets==13.1,filetype,materialyoucolor,asynckivy,asyncgui
+requirements = python3,kivy==2.3.1,https://github.com/kivymd/KivyMD/archive/master.zip,\
+              websockets==13.1,filetype,materialyoucolor,asynckivy,asyncgui,pyjnius
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -95,7 +96,7 @@ fullscreen = 0
 
 # (list) Permissions
 # (See https://python-for-android.readthedocs.io/en/latest/buildoptions/#build-options-1 for all the supported syntaxes and properties)
-android.permissions = INTERNET,ACCESS_NETWORK_STATE,WAKE_LOCK
+android.permissions = INTERNET,ACCESS_NETWORK_STATE,WAKE_LOCK,RECORD_AUDIO
 
 # (list) features (adds uses-feature -tags to manifest)
 #android.features = android.hardware.usb.host
@@ -177,7 +178,8 @@ android.ndk_api = 26
 
 # (list) List of Java files to add to the android project (can be java or a
 # directory containing the files)
-#android.add_src =
+# bundle our tiny listener class
+android.add_src = java
 
 # (list) Android AAR archives to add
 #android.add_aars =

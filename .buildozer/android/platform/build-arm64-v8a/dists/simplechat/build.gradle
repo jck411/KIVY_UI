@@ -62,7 +62,7 @@ android {
     sourceSets {
         main {
             jniLibs.srcDir 'libs'
-            java {}
+            java {srcDir '/home/human/AAREPOS/KIVY_UI/java'}
         }
     }
 
