@@ -1,0 +1,21 @@
+{
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "java.project.sourcePaths": [],
+    "java.import.gradle.enabled": false,
+    "java.import.maven.enabled": false,
+    "java.compile.nullAnalysis.mode": "disabled",
+    "java.project.referencedLibraries": [],
+    "java.completion.enabled": false,
+    "java.project.resourceFilters": ["node_modules", ".git", "java"],
+    "files.exclude": {
+        "**/.buildozer": true,
+        "**/__pycache__": true,
+        "bin/": true
+    },
+    "files.associations": {
+        "java/**/*.java": "plaintext"
+    },
+    "files.watcherExclude": {
+        "java/**": true
+    }
+} 

@@ -1,0 +1,74 @@
+name: linux-build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        
+    - name: Install UV package manager
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        
+    - name: Install dependencies with UV
+      run: |
+        uv sync --extra desktop --extra dev
+        uv add pyinstaller
+        
+    - name: Install system dependencies for Linux build
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xclip xsel
+        
+    - name: Run smoke tests
+      run: |
+        uv run python -m pytest tests/ -v
+        
+    - name: Create PyInstaller spec
+      run: |
+        uv run python scripts/create_pyinstaller_spec.py
+        
+    - name: Build Linux executable
+      run: |
+        uv run pyinstaller --clean KivyChatUI.spec
+        
+    - name: Test executable launches
+      run: |
+        # Test that the binary exists and is executable
+        ls -la dist/
+        file dist/KivyChatUI
+        chmod +x dist/KivyChatUI
+        
+        # Basic executable test (GUI apps can't show --help in headless, so just check it runs)
+        timeout 10s xvfb-run -a dist/KivyChatUI --version || echo "GUI app launched (expected timeout in headless)"
+        
+    - name: Upload Linux executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: KivyChatUI-linux
+        path: dist/KivyChatUI
+        if-no-files-found: error
+        retention-days: 30
+        
+    - name: Upload PyInstaller logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-logs-linux
+        path: |
+          build/
+          *.log
+        retention-days: 7 

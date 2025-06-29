@@ -6,15 +6,28 @@ authors = [
     {name = "Chat UI Team", email = "team@chatui.com"}
 ]
 dependencies = [
-    "kivymd>=1.2.0,<2.0.0",
-    "kivy>=2.3.1",
-    "websockets>=13.1",
+    "kivy==2.3.1",
+    "kivymd",
+    "websockets==13.1",
+    "setuptools>=80.9.0",
+    "pip>=25.1.1",
+    "buildozer==1.5.0",
+    "plyer>=2.1.0",
+    "pyinstaller>=6.14.1",
 ]
 requires-python = ">=3.11"
 readme = "README.md"
 license = {text = "MIT"}
 
 [project.optional-dependencies]
+android = [
+    # pyjnius temporarily disabled due to Python 3.13 compatibility issues
+    # See: https://github.com/kivy/buildozer/issues/1862
+    # Will be re-enabled when pyjnius supports Python 3.13
+]
+desktop = [
+    "plyer",
+]
 dev = [
     "black>=25.1.0",
     "pytest>=8.3.4",
@@ -28,12 +41,17 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["chat_ui"]
 
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [tool.uv]
 dev-dependencies = [
     "black>=25.1.0",
+    "buildozer==1.5.0",
+    "cython==0.29.36",
     "pytest>=8.3.4",
     "pytest-asyncio>=0.25.0",
 ] 
 
 [tool.uv.sources]
-kivymd = { git = "https://github.com/kivymd/KivyMD.git" }
+kivymd = { git = "https://github.com/kivymd/KivyMD.git", branch = "master" }
