@@ -1,13 +1,13 @@
 [app]
 
 # (str) Title of your application
-title = Simple Chat
+title = KivyMD Chat UI
 
 # (str) Package name
-package.name = simplechat
+package.name = KivyChatUI
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = com.yourcompany
+package.domain = com.kivymd.chatui
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -22,7 +22,7 @@ source.include_exts = py,png,jpg,kv,atlas,json
 #source.exclude_exts = spec
 
 # (list) List of directory to exclude (let empty to not exclude anything)
-source.exclude_dirs = tests,bin,venv,.git,__pycache__,.pytest_cache
+source.exclude_dirs = tests,bin,venv,.git,__pycache__,.pytest_cache,.venv,artefacts,scripts
 
 # (list) List of exclusions using pattern matching
 # Do not prefix with './'
@@ -37,7 +37,7 @@ version = 0.1.0
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.3.1,https://github.com/kivymd/KivyMD/archive/master.zip,\
+requirements = python3,kivy==2.3.1,https://github.com/kivymd/KivyMD/archive/master.zip,websockets==13.1,setuptools>=80.9.0,filetype,materialyoucolor,asynckivy,asyncgui
               websockets==13.1,filetype,materialyoucolor,asynckivy,asyncgui,pyjnius
 
 # (str) Custom source folders for requirements
