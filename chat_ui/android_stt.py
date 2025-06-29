@@ -2,10 +2,10 @@
 chat_ui/android_stt.py – fixed with safe imports
 """
 try:
-    from android import mActivity
-    from android.runnable import run_on_ui_thread
-    from android.permissions import Permission, request_permissions, check_permission
-    from jnius import autoclass, PythonJavaClass, java_method
+    from android import mActivity  # type: ignore
+    from android.runnable import run_on_ui_thread  # type: ignore
+    from android.permissions import Permission, request_permissions, check_permission  # type: ignore
+    from jnius import autoclass, PythonJavaClass, java_method  # type: ignore
     ANDROID_AVAILABLE = True
 except ImportError:
     ANDROID_AVAILABLE = False
