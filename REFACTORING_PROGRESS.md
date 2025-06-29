@@ -22,7 +22,7 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
 | M3    | Introduce reproducible **Android** build (Buildozer-Docker + CI)      | ✅ DONE | M2        |
 | M4    | Introduce reproducible **Linux** build (PyInstaller or AppImage + CI) | ✅ DONE | M3        |
 | M5    | Add smoke-tests & enforce them in CI                                  | ✅ DONE | M3        |
-| M6    | Merge branches & cut tagged releases                                  | ⏳ TODO | M4 M5     |
+| M6    | Merge branches & cut tagged releases                                  | ✅ DONE | M4 M5     |
 
 ---
 
@@ -125,19 +125,23 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
 
 ---
 
-### **M6 · Merge & Release** ⏳ PENDING M4,M5
+### **M6 · Merge & Release** 🔄 IN PROGRESS
 
-- [ ] **m6.1** Fast-forward android branch to main
-  - [ ] Create android branch
-  - [ ] Merge main with `--no-ff`
-  - [ ] Verify CI green on both branches
-  - **Status**: TODO (blocked by M4,M5)
+- [x] **m6.1** Fast-forward android branch to main
+  - [x] Create android branch ✅
+  - [x] Merge main with `--no-ff` ✅
+  - [x] Verify CI green on both branches ✅
+  - **Status**: ✅ DONE (2025-06-29)
 
-- [ ] **m6.2** Tag v1.0.0 & draft release notes
-  - [ ] Create annotated tag `v1.0.0`
-  - [ ] Push tags to GitHub
-  - [ ] Verify artifacts attached automatically
-  - **Status**: TODO (blocked by M6.1)
+- [x] **m6.2** Tag v1.0.0 & draft release notes
+  - [x] Create annotated tag `v1.0.0` ✅
+  - [x] Push tags to GitHub ✅
+  - [x] Verify artifacts attached automatically ✅
+  - **Added**: Comprehensive release notes with:
+    - Major features and achievements
+    - Technical details and artifacts
+    - Known limitations and documentation
+  - **Status**: ✅ DONE (2025-06-29)
 
 ---
 
@@ -150,8 +154,8 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
 - **M3**: Android Build Pipeline ✅
 - **M4**: Linux Build Pipeline ✅
 
-### 🔄 **NEXT IMMEDIATE TASK**
-**M6.1**: Fast-forward android branch to main and verify CI
+### 🎉 **ALL MILESTONES COMPLETED!**
+The refactoring project is complete! All milestones achieved!
 
 ### 🏆 **Major Achievements**
 - ✅ Platform abstraction working correctly
@@ -184,8 +188,15 @@ Your application now has:
 - ✅ **Modern dependency management** (UV with optional dependencies)
 - ✅ **Automated builds for both platforms**
 
-**Almost finished!** Only M6 (merge & release) remains!
+**🎉 PROJECT COMPLETE! 🎉**
 
-**Next Step**: M6.1 - Fast-forward android branch to main
+All milestones achieved:
+- M0: Baseline & Safety ✅
+- M1: Platform Abstraction Layer ✅
+- M2: Dependency Governance ✅
+- M3: Android Build Pipeline ✅
+- M4: Linux Build Pipeline ✅
+- M5: Testing & Quality Gates ✅
+- M6: Merge & Release ✅
 
-**Next Command**: Merge main into android branch and verify CI 
+**v1.0.0 Released!** Check GitHub for the release artifacts! 
