@@ -1,5 +1,5 @@
 """
-chat_ui/android_stt.py – fixed with safe imports
+chat_ui/android_stt.py – Restored working implementation with proper Android threading
 """
 try:
     from android import mActivity

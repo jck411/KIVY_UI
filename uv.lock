@@ -330,7 +330,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "black", marker = "extra == 'dev'", specifier = ">=25.1.0" },
-    { name = "buildozer", specifier = ">=1.5.0" },
+    { name = "buildozer", specifier = "==1.5.0" },
     { name = "kivy", specifier = "==2.3.1" },
     { name = "kivymd", git = "https://github.com/kivymd/KivyMD.git?branch=master" },
     { name = "pip", specifier = ">=25.1.1" },

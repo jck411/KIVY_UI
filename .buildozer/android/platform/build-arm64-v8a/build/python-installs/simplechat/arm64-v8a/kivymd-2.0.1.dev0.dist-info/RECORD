@@ -21,7 +21,7 @@ kivymd/__pycache__/font_definitions.cpython-311.pyc,,
 kivymd/__pycache__/icon_definitions.cpython-311.pyc,,
 kivymd/__pycache__/material_resources.cpython-311.pyc,,
 kivymd/__pycache__/theming.cpython-311.pyc,,
-kivymd/_version.py,sha256=Xh9eT1jkgmgj7d4bnM3ACNhwlMwPY0ncHDdlyDu1UCQ,115
+kivymd/_version.py,sha256=LvGXnNNvD76rkb20qF-5ZKkSpR2EXgQ5BI3NaHnM0nw,115
 kivymd/animation.py,sha256=2rTwtvb7ObKYzTMV5SQ3NkChpZDwhHLBFXvV_AYA51o,6357
 kivymd/app.py,sha256=ES3rpeG70ZqUQrIYIeF_W2i9aIgWbNy5HcPz-u0SI68,5711
 kivymd/dynamic_color.py,sha256=10dPZzpBqsbUs6V-xSz-IaRvohYnMyJJ8cu4AVoyVq8,16328

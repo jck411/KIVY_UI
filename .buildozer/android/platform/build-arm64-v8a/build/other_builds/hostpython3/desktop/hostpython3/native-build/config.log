@@ -29,14 +29,15 @@ uname -v = #28~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Fri May 23 10:31:01 UTC 2
 
 PATH: /home/human/.buildozer/android/platform/apache-ant-1.9.4/bin
 PATH: /home/human/AAREPOS/KIVY_UI/.venv/bin
-PATH: /home/human/AAREPOS/kivy-chat-app/.venv/bin
 PATH: /home/human/.local/bin
+PATH: /home/human/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin
 PATH: /home/human/.local/bin
-PATH: /tmp/.mount_cursorkdC6tI/usr/bin/
-PATH: /tmp/.mount_cursorkdC6tI/usr/sbin/
-PATH: /tmp/.mount_cursorkdC6tI/usr/games/
-PATH: /tmp/.mount_cursorkdC6tI/bin/
-PATH: /tmp/.mount_cursorkdC6tI/sbin/
+PATH: /home/human/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin
+PATH: /tmp/.mount_cursorOPoABx/usr/bin/
+PATH: /tmp/.mount_cursorOPoABx/usr/sbin/
+PATH: /tmp/.mount_cursorOPoABx/usr/games/
+PATH: /tmp/.mount_cursorOPoABx/bin/
+PATH: /tmp/.mount_cursorOPoABx/sbin/
 PATH: /home/human/.local/bin
 PATH: /usr/local/sbin
 PATH: /usr/local/bin
@@ -4614,7 +4615,7 @@ conftest.c: In function 'main':
 conftest.c:91:8: warning: implicit declaration of function 'makedev' [-Wimplicit-function-declaration]
    91 | return makedev(0, 0);
       |        ^~~~~~~
-/usr/bin/ld: /tmp/ccQWpwZH.o: in function `main':
+/usr/bin/ld: /tmp/cctrH7bX.o: in function `main':
 conftest.c:(.text+0x18): undefined reference to `makedev'
 collect2: error: ld returned 1 exit status
 configure:9391: $? = 1
@@ -7606,7 +7607,7 @@ configure:12384: result: no
 Package 'libnsl', required by 'virtual:world', not found
 configure:12408: checking for library containing yp_match
 configure:12439: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccUXOwtK.o: in function `main':
+/usr/bin/ld: /tmp/ccmRmpBJ.o: in function `main':
 conftest.c:(.text+0xe): undefined reference to `yp_match'
 collect2: error: ld returned 1 exit status
 configure:12439: $? = 1
@@ -9959,7 +9960,7 @@ configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for explicit_memset
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccQaumPX.o: in function `main':
+/usr/bin/ld: /tmp/ccFiEoys.o: in function `main':
 conftest.c:(.text+0xe): undefined reference to `explicit_memset'
 collect2: error: ld returned 1 exit status
 configure:15227: $? = 1
@@ -10195,7 +10196,7 @@ configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for fdwalk
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccYFniKY.o: in function `main':
+/usr/bin/ld: /tmp/ccGtphs5.o: in function `main':
 conftest.c:(.text+0xe): undefined reference to `fdwalk'
 collect2: error: ld returned 1 exit status
 configure:15227: $? = 1
@@ -10424,7 +10425,7 @@ configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for fork1
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccwE60tN.o: in function `main':
+/usr/bin/ld: /tmp/cc3NLR6i.o: in function `main':
 conftest.c:(.text+0xe): undefined reference to `fork1'
 collect2: error: ld returned 1 exit status
 configure:15227: $? = 1
@@ -10748,7 +10749,7 @@ configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for _getpty
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccRLEEUP.o: in function `main':
+/usr/bin/ld: /tmp/ccayHot3.o: in function `main':
 conftest.c:(.text+0xe): undefined reference to `_getpty'
 collect2: error: ld returned 1 exit status
 configure:15227: $? = 1
@@ -11038,7 +11039,7 @@ configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for getwd
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccmHGxUo.o: in function `main':
+/usr/bin/ld: /tmp/ccrRX277.o: in function `main':
 conftest.c:(.text+0xe): warning: the `getwd' function is dangerous and should not be used.
 configure:15227: $? = 0
 configure:15227: result: yes
@@ -11152,7 +11153,7 @@ configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for plock
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccNHJiYp.o: in function `main':
+/usr/bin/ld: /tmp/ccwo5pIy.o: in function `main':
 conftest.c:(.text+0xe): undefined reference to `plock'
 collect2: error: ld returned 1 exit status
 configure:15227: $? = 1
@@ -11473,7 +11474,7 @@ configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for pthread_init
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccKpTMW6.o: in function `main':
+/usr/bin/ld: /tmp/ccrEkjeE.o: in function `main':
 conftest.c:(.text+0xe): undefined reference to `pthread_init'
 collect2: error: ld returned 1 exit status
 configure:15227: $? = 1
@@ -11803,7 +11804,7 @@ configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for rtpSpawn
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccoFOnEB.o: in function `main':
+/usr/bin/ld: /tmp/ccfpEvXr.o: in function `main':
 conftest.c:(.text+0xe): undefined reference to `rtpSpawn'
 collect2: error: ld returned 1 exit status
 configure:15227: $? = 1
@@ -12310,7 +12311,7 @@ configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for tempnam
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccmMdpLL.o: in function `main':
+/usr/bin/ld: /tmp/ccK6l0q7.o: in function `main':
 conftest.c:(.text+0xe): warning: the use of `tempnam' is dangerous, better use `mkstemp'
 configure:15227: $? = 0
 configure:15227: result: yes
@@ -12328,13 +12329,13 @@ configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for tmpnam
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccmPISmk.o: in function `main':
+/usr/bin/ld: /tmp/ccFCV4t3.o: in function `main':
 conftest.c:(.text+0xe): warning: the use of `tmpnam' is dangerous, better use `mkstemp'
 configure:15227: $? = 0
 configure:15227: result: yes
 configure:15227: checking for tmpnam_r
 configure:15227: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccrDydkH.o: in function `main':
+/usr/bin/ld: /tmp/ccqUIyhp.o: in function `main':
 conftest.c:(.text+0xe): warning: the use of `tmpnam_r' is dangerous, better use `mkstemp'
 configure:15227: $? = 0
 configure:15227: result: yes
@@ -13561,7 +13562,7 @@ conftest.c: In function 'main':
 conftest.c:349:6: warning: implicit declaration of function 'chflags' [-Wimplicit-function-declaration]
   349 |   if(chflags(argv[0], 0) != 0)
       |      ^~~~~~~
-/usr/bin/ld: /tmp/cckjidzL.o: in function `main':
+/usr/bin/ld: /tmp/ccfSrGjh.o: in function `main':
 conftest.c:(.text+0x28): warning: chflags is not implemented and will always fail
 configure:16110: $? = 0
 configure:16110: ./conftest
@@ -13928,7 +13929,7 @@ conftest.c: In function 'main':
 conftest.c:349:6: warning: implicit declaration of function 'lchflags' [-Wimplicit-function-declaration]
   349 |   if(lchflags(argv[0], 0) != 0)
       |      ^~~~~~~~
-/usr/bin/ld: /tmp/cc6UyQlq.o: in function `main':
+/usr/bin/ld: /tmp/ccMLJgL4.o: in function `main':
 conftest.c:(.text+0x28): undefined reference to `lchflags'
 collect2: error: ld returned 1 exit status
 configure:16159: $? = 1
@@ -15175,7 +15176,7 @@ configure:17968: $? = 0
 configure:17968: result: yes
 configure:18068: checking for fseek64
 configure:18068: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccn7TcJl.o: in function `main':
+/usr/bin/ld: /tmp/cczwW23I.o: in function `main':
 conftest.c:(.text+0xe): undefined reference to `fseek64'
 collect2: error: ld returned 1 exit status
 configure:18068: $? = 1
@@ -15597,7 +15598,7 @@ configure:18068: $? = 0
 configure:18068: result: yes
 configure:18068: checking for ftell64
 configure:18068: gcc -o conftest    conftest.c -ldl  >&5
-/usr/bin/ld: /tmp/ccCHyBcz.o: in function `main':
+/usr/bin/ld: /tmp/ccBGuOyM.o: in function `main':
 conftest.c:(.text+0xe): undefined reference to `ftell64'
 collect2: error: ld returned 1 exit status
 configure:18068: $? = 1

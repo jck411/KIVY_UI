@@ -32,14 +32,15 @@ PATH: /home/human/.buildozer/android/platform/android-ndk-r25b/
 PATH: /home/human/.buildozer/android/platform/android-sdk/tools/
 PATH: /home/human/.buildozer/android/platform/apache-ant-1.9.4/bin/
 PATH: /home/human/AAREPOS/KIVY_UI/.venv/bin/
-PATH: /home/human/AAREPOS/kivy-chat-app/.venv/bin/
 PATH: /home/human/.local/bin/
+PATH: /home/human/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/
 PATH: /home/human/.local/bin/
-PATH: /tmp/.mount_cursorkdC6tI/usr/bin/
-PATH: /tmp/.mount_cursorkdC6tI/usr/sbin/
-PATH: /tmp/.mount_cursorkdC6tI/usr/games/
-PATH: /tmp/.mount_cursorkdC6tI/bin/
-PATH: /tmp/.mount_cursorkdC6tI/sbin/
+PATH: /home/human/.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/
+PATH: /tmp/.mount_cursorOPoABx/usr/bin/
+PATH: /tmp/.mount_cursorOPoABx/usr/sbin/
+PATH: /tmp/.mount_cursorOPoABx/usr/games/
+PATH: /tmp/.mount_cursorOPoABx/bin/
+PATH: /tmp/.mount_cursorOPoABx/sbin/
 PATH: /home/human/.local/bin/
 PATH: /usr/local/sbin/
 PATH: /usr/local/bin/
@@ -1020,7 +1021,7 @@ configure:18637: checking for memfd_create
 configure:18637: /home/human/.buildozer/android/platform/android-ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/bin/clang -target aarch64-linux-android26 -fomit-frame-pointer -march=armv8-a -fPIC -o conftest -target aarch64-linux-android26 -fomit-frame-pointer -march=armv8-a -fPIC -Wall -fexceptions -DANDROID -I/home/human/.buildozer/android/platform/android-ndk-r25b/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include -I/home/human/AAREPOS/KIVY_UI/.buildozer/android/platform/build-arm64-v8a/build/python-installs/simplechat/arm64-v8a/include/python3.1   -L/home/human/AAREPOS/KIVY_UI/.buildozer/android/platform/build-arm64-v8a/build/libs_collections/simplechat/arm64-v8a conftest.c  >&5
 ld: error: undefined symbol: memfd_create
 >>> referenced by conftest.c
->>>               /tmp/conftest-e452bc.o:(main)
+>>>               /tmp/conftest-56c7ad.o:(main)
 clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
 configure:18637: $? = 1
 configure: failed program was:

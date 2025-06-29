@@ -1,6 +1,8 @@
 """
 Modern 2025 Chat Interface - Optimized for production use
 """
+import asyncio
+import logging
 import threading
 import time
 from kivy.clock import Clock, mainthread
@@ -17,6 +19,9 @@ from kivymd.uix.scrollview import MDScrollView
 from chat_ui.websocket_client import ChatWebSocketClient, ConnectionState
 from chat_ui.theme import Colors, Sizes, Spacing, Layout
 from chat_ui.config import Config, Messages
+
+# Create logger instance
+logger = logging.getLogger(__name__)
 
 # Import STT only when on Android platform
 try:
@@ -300,14 +305,26 @@ class ModernChatScreen(MDScreen):
         thread.start()
     
     def _threaded_test(self):
-        """Test connection availability"""
+        """Test connection availability by actually attempting to connect"""
         try:
-            connected = self.client.test_connection_sync()
-            self.backend_available = connected
+            # Set status to connecting
+            Clock.schedule_once(lambda dt: setattr(self.status_label, 'text', Messages.CONNECTING))
             
+            # Use the proper connection test method
+            future = asyncio.run_coroutine_threadsafe(
+                self.client._test_connection_persistent(), 
+                self.client._loop
+            )
+            connected = future.result(timeout=Config.CONNECTION_TEST_TIMEOUT)
+            
+            # Update status based on result
+            self.backend_available = connected
             status_text = Messages.ONLINE if connected else Messages.DEMO_MODE
             Clock.schedule_once(lambda dt: setattr(self.status_label, 'text', status_text))
-        except Exception:
+            
+        except Exception as e:
+            logger.debug(f"Connection test failed: {e}")
+            self.backend_available = False
             Clock.schedule_once(lambda dt: setattr(self.status_label, 'text', Messages.DEMO_MODE))
     
     def _monitor_connection_state(self, dt):
@@ -463,7 +480,7 @@ class ModernChatScreen(MDScreen):
     
     # ========== STT Integration Methods ==========
     
-    def _toggle_voice(self, *a):
+    def _toggle_voice(self, *args):
         """Toggle voice recording on/off with debouncing"""
         print("UI: _toggle_voice() called")
         
@@ -530,26 +547,20 @@ class ModernChatScreen(MDScreen):
 
     @mainthread
     def _on_voice_done(self, txt):
-        """Handle final speech recognition result and send message"""
+        """Handle completed speech recognition"""
         print(f"UI: _on_voice_done called with: '{txt}'")
         try:
-            # Reset voice state
+            # Reset UI state first
             self._voice_on = False
-            if STT_AVAILABLE and hasattr(self, 'mic_btn'):
+            if hasattr(self, 'mic_btn'):
                 self.mic_btn.icon = "microphone"
-                print("UI: Reset mic button to microphone")
+                print("UI: Button reset to microphone")
             
-            if hasattr(self, '_stt'):
-                self._stt.is_listening = False
-                print("UI: Reset STT listening state")
-            
+            # Process the final text
             if txt and txt.strip():
                 self.text_input.text = txt
-                print(f"UI: Text input set to: '{txt}', sending message")
-                self.send_message(None)
-            else:
-                print("UI: Empty text received, not sending message")
+                print(f"UI: Final text set to: '{txt}'")
+                # Auto-send the message
+                Clock.schedule_once(lambda dt: self.send_message(None), 0.1)
         except Exception as e:
             print(f"UI: Error in _on_voice_done: {e}")
-            import traceback
-            traceback.print_exc()

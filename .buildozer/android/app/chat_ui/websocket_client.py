@@ -120,13 +120,7 @@ class ChatWebSocketClient:
         except Exception as e:
             raise Exception(f"Message send failed: {str(e)}")
     
-    def test_connection_sync(self) -> bool:
-        """Test if backend connection is available (synchronous wrapper)"""
-        try:
-            future = asyncio.run_coroutine_threadsafe(self._test_connection_persistent(), self._loop)
-            return future.result(timeout=Config.CONNECTION_TEST_TIMEOUT)
-        except Exception:
-            return False
+
     
     def get_connection_state(self) -> ConnectionState:
         """Get current connection state"""
@@ -269,8 +263,7 @@ class ChatWebSocketClient:
                 }
                 
                 await self._websocket.send(json.dumps(message_data))
-                # Debug logging disabled for production - uncomment for debugging:
-                # logger.debug(f"📤 Message sent: {message[:50]}...")
+
                 return "Message sent successfully"
                 
             except Exception as e:
@@ -330,8 +323,7 @@ class ChatWebSocketClient:
                         try:
                             ping_data = {"type": "ping", "timestamp": current_time}
                             await self._websocket.send(json.dumps(ping_data))
-                            # Only log health checks in debug mode, not for production
-                            # logger.debug("💓 Health check ping sent")
+                            
                         except Exception as e:
                             logger.warning(f"Health check failed: {e}")
                             await self._schedule_reconnect()

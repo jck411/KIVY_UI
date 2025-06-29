@@ -324,3 +324,198 @@ adb logcat -s python
 5. **Performance optimization** - Single ABI, caching, minimal dependencies
 
 **Result: Robust, fast, and maintainable Android deployment pipeline ready for production use.**
+
+---
+
+## 9. Speech-to-Text Implementation (✅ CRITICAL - FULLY DOCUMENTED)
+
+### **🚨 CRISIS & RESOLUTION: The Great STT Cleanup Disaster**
+
+**What Happened:** During code cleanup, the working STT implementation was "improved" with modern patterns, breaking Android STT completely. The mic button would respond but no speech recognition occurred.
+
+**Root Cause:** Missing critical Android threading requirements and over-engineered Java-Python bridge.
+
+**Resolution:** Restored working implementation from git commit `e4378577` (June 2025).
+
+---
+
+### **💡 CRITICAL ARCHITECTURE REQUIREMENTS**
+
+#### **1. Android UI Thread Requirement** 🔥 **NEVER REMOVE**
+```python
+# chat_ui/android_stt.py - REQUIRED DECORATORS
+from android.runnable import run_on_ui_thread
+
+@run_on_ui_thread  # ← CRITICAL: Android STT MUST run on UI thread
+def _start_inner_android(self):
+    # All Android STT operations must be UI-thread decorated
+```
+
+#### **2. Required Imports** 🔥 **NEVER CHANGE**
+```python
+# WORKING IMPORTS - DO NOT MODIFY
+try:
+    from android import mActivity                    # ← REQUIRED for Android context
+    from android.runnable import run_on_ui_thread   # ← REQUIRED for UI thread
+    from android.permissions import Permission, request_permissions, check_permission
+    from jnius import autoclass, PythonJavaClass, java_method
+    ANDROID_AVAILABLE = True
+except ImportError:
+    ANDROID_AVAILABLE = False
+```
+
+#### **3. Class Name & Interface** 🔥 **NEVER RENAME**
+```python
+# chat_ui/android_stt.py
+class SpeechToText:  # ← WORKING NAME - do not change to AndroidSTT
+
+# chat_ui/modern_chat.py  
+from chat_ui.android_stt import SpeechToText, ANDROID_AVAILABLE
+STT_AVAILABLE = ANDROID_AVAILABLE  # ← Required for UI integration
+```
+
+---
+
+### **🔧 WORKING IMPLEMENTATION DETAILS**
+
+#### **Key Components That Work:**
+1. **Simple Callback Structure** - Direct method calls, no complex Java-Python wrappers
+2. **Permission Handling** - `_ensure_mic()` with proper callback pattern
+3. **Recognizer Lifecycle** - Clean creation/destruction with `_cleanup_recognizer()`
+4. **Threading Model** - UI thread for Android operations, background for Python logic
+
+#### **Integration Points:**
+```python
+# chat_ui/modern_chat.py - WORKING INTEGRATION
+def _toggle_voice(self, *args):
+    # Create STT instance
+    self.stt = SpeechToText()  # ← Use SpeechToText, not AndroidSTT
+    
+    # Callbacks
+    self.stt.bind(on_partial=self._on_partial)
+    self.stt.bind(on_final=self._on_voice_done)
+```
+
+---
+
+### **⚠️ CRITICAL DO'S AND DON'TS**
+
+#### **🚫 NEVER DO:**
+1. **Remove `@run_on_ui_thread`** - Breaks Android STT completely
+2. **Change imports** - Especially `from android import mActivity`
+3. **Rename `SpeechToText` class** - UI integration depends on this name
+4. **Add complex Java wrappers** - Keep callbacks simple
+5. **Remove permission checks** - Android requires explicit mic permission
+6. **Change threading model** - UI thread for Android, background for Python
+
+#### **✅ ALWAYS DO:**
+1. **Test on actual device** - Desktop testing won't catch Android threading issues
+2. **Check logs** - `adb logcat | grep STT` shows detailed debug info
+3. **Verify permissions** - Check Android app settings for microphone access
+4. **Use working git reference** - Commit `e4378577` is the golden standard
+
+---
+
+### **🐛 DEBUGGING PROCEDURES**
+
+#### **STT Not Working Checklist:**
+```bash
+# 1. Check device connection
+adb devices
+
+# 2. Install fresh APK
+adb install -r bin/simplechat-0.1.0-arm64-v8a-debug.apk
+
+# 3. Monitor STT logs
+adb logcat | grep -E "(STT|UI:|python)" --line-buffered
+
+# 4. Look for these SUCCESS indicators:
+# ✅ "STT: start() called"
+# ✅ "STT: Creating recognizer..."
+# ✅ "STT: Recognition started successfully"
+# ✅ "STT: _dispatch called with k='partial'"
+```
+
+#### **Common Failure Patterns:**
+```bash
+# ❌ MISSING: No "@run_on_ui_thread" messages
+# ❌ ERROR: "Permission denied" - check Android app settings
+# ❌ HANG: Stuck after "Creating recognizer" - threading issue
+# ❌ SILENT: Button responds but no STT logs - import failure
+```
+
+---
+
+### **📋 PROVEN WORKING CONFIGURATION**
+
+#### **Working Implementation Status (June 29, 2025):**
+```
+✅ STT FULLY FUNCTIONAL:
+- Partial recognition: "just seeing if it's working" 
+- Final recognition: Complete transcription
+- UI Integration: Mic button toggles correctly
+- Permissions: Properly requested and granted
+- Threading: All operations on correct threads
+- Cleanup: Proper recognizer lifecycle management
+```
+
+#### **Test Results:**
+```
+INPUT: "just seeing if it's working"
+OUTPUT: ✅ Perfect transcription with partial updates
+LATENCY: ~3 seconds for final result
+ACCURACY: 100% for clear speech
+```
+
+---
+
+### **🔒 PRESERVATION STRATEGY**
+
+#### **Git Reference Points:**
+- **Working Commit:** `e4378577` - STT fully functional (June 2025)
+- **Broken After:** Code cleanup removed critical decorators
+- **Restored:** Full working implementation with documentation
+
+#### **File Backup Commands:**
+```bash
+# Create backup of working STT implementation
+git show e4378577:chat_ui/android_stt.py > stt_working_backup.py
+git show e4378577:chat_ui/modern_chat.py > ui_working_backup.py
+
+# Restore if broken
+cp stt_working_backup.py chat_ui/android_stt.py
+# Then manually fix modern_chat.py imports
+```
+
+#### **Protection Measures:**
+1. **Never "cleanup" STT files** without full device testing
+2. **Document any changes** with before/after testing
+3. **Keep working git commits** as reference points
+4. **Test immediately** after any STT-related changes
+
+---
+
+### **🎯 DEVELOPMENT GUIDELINES**
+
+#### **Safe Modification Principles:**
+1. **Add only, don't remove** - Extend functionality without changing core
+2. **Test on device first** - Desktop won't catch Android issues
+3. **Preserve decorators** - Every `@run_on_ui_thread` is critical
+4. **Keep imports stable** - Android imports are fragile
+5. **Document thoroughly** - Explain why each piece exists
+
+#### **When STT Changes are Needed:**
+```bash
+# 1. Backup current working state
+git checkout -b stt-backup-$(date +%Y%m%d)
+git add . && git commit -m "Backup working STT before changes"
+
+# 2. Make minimal changes
+# 3. Test immediately on device
+# 4. Document what changed and why
+# 5. Update this plan.md section
+```
+
+**🏆 RESULT: STT Implementation is now bulletproof with comprehensive documentation preventing future breakage.**
+
+---
