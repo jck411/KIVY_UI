@@ -21,7 +21,7 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
 | M2    | Centralise dependencies in `pyproject.toml`                           | ✅ DONE | M1        |
 | M3    | Introduce reproducible **Android** build (Buildozer-Docker + CI)      | ✅ DONE | M2        |
 | M4    | Introduce reproducible **Linux** build (PyInstaller or AppImage + CI) | ✅ DONE | M3        |
-| M5    | Add smoke-tests & enforce them in CI                                  | 🔄 PROGRESS | M3        |
+| M5    | Add smoke-tests & enforce them in CI                                  | ✅ DONE | M3        |
 | M6    | Merge branches & cut tagged releases                                  | ⏳ TODO | M4 M5     |
 
 ---
@@ -114,10 +114,14 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
   - **Added**: CI integration in Linux and Android workflows
   - **Status**: ✅ DONE (2025-06-29)
 
-- [ ] **m5.2** Enable branch protection
-  - [ ] Configure GitHub branch protection rules
-  - [ ] Require CI passes before merge
-  - **Status**: ⏳ NEXT
+- [x] **m5.2** Enable branch protection
+  - [x] Configure GitHub branch protection rules ✅
+  - [x] Require CI passes before merge ✅
+  - **Added**: Protected `main` branch with:
+    - Required PR reviews
+    - Required CI success (Linux + Android)
+    - No direct pushes allowed
+  - **Status**: ✅ DONE (2025-06-29)
 
 ---
 
@@ -147,7 +151,7 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
 - **M4**: Linux Build Pipeline ✅
 
 ### 🔄 **NEXT IMMEDIATE TASK**
-**M5.2**: Enable branch protection rules to enforce CI quality gates
+**M6.1**: Fast-forward android branch to main and verify CI
 
 ### 🏆 **Major Achievements**
 - ✅ Platform abstraction working correctly
@@ -180,8 +184,8 @@ Your application now has:
 - ✅ **Modern dependency management** (UV with optional dependencies)
 - ✅ **Automated builds for both platforms**
 
-**Almost finished!** Only M5.2 (branch protection) and M6 (merge & release) remain!
+**Almost finished!** Only M6 (merge & release) remains!
 
-**Next Step**: M5.2 - Enable branch protection rules
+**Next Step**: M6.1 - Fast-forward android branch to main
 
-**Next Command**: Set up GitHub branch protection for quality gates 
+**Next Command**: Merge main into android branch and verify CI 
