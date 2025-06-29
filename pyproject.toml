@@ -20,7 +20,9 @@ license = {text = "MIT"}
 
 [project.optional-dependencies]
 android = [
-    "pyjnius",
+    # pyjnius temporarily disabled due to Python 3.13 compatibility issues
+    # See: https://github.com/kivy/buildozer/issues/1862
+    # Will be re-enabled when pyjnius supports Python 3.13
 ]
 desktop = [
     "plyer",
