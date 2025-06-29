@@ -1,0 +1,38 @@
+name: android-build
+
+on:
+  push:
+    branches: [android]
+  workflow_dispatch: {}
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Build Android APK
+      uses: digreatbrian/buildozer-action@v2
+      with:
+        python-version: "3.11"
+        buildozer-cmd: "buildozer -v android debug"
+        
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: KivyChatUI.apk
+        path: bin/*.apk
+        if-no-files-found: error
+        retention-days: 30
+        
+    - name: Upload build logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-logs
+        path: |
+          .buildozer/
+          *.log
+        retention-days: 7 
