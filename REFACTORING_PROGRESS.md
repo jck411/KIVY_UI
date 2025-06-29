@@ -21,7 +21,7 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
 | M2    | Centralise dependencies in `pyproject.toml`                           | ✅ DONE | M1        |
 | M3    | Introduce reproducible **Android** build (Buildozer-Docker + CI)      | ✅ DONE | M2        |
 | M4    | Introduce reproducible **Linux** build (PyInstaller or AppImage + CI) | ✅ DONE | M3        |
-| M5    | Add smoke-tests & enforce them in CI                                  | ⏳ TODO | M3        |
+| M5    | Add smoke-tests & enforce them in CI                                  | 🔄 PROGRESS | M3        |
 | M6    | Merge branches & cut tagged releases                                  | ⏳ TODO | M4 M5     |
 
 ---
@@ -104,18 +104,20 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
 
 ---
 
-### **M5 · Test & Quality Gates** ⏳ PENDING M3
+### **M5 · Test & Quality Gates** ⏳ IN PROGRESS
 
-- [ ] **m5.1** Add smoke-test for platform dispatch
-  - [ ] Create `tests/test_platform.py`
-  - [ ] Test platform imports work correctly
-  - [ ] Ensure pytest passes on both workflows
-  - **Status**: TODO (blocked by M3)
+- [x] **m5.1** Add smoke-test for platform dispatch
+  - [x] Create `tests/test_platform.py` ✅
+  - [x] Test platform imports work correctly ✅
+  - [x] Ensure pytest passes on both workflows ✅
+  - **Added**: Complete test suite with 31 passing tests
+  - **Added**: CI integration in Linux and Android workflows
+  - **Status**: ✅ DONE (2025-06-29)
 
 - [ ] **m5.2** Enable branch protection
   - [ ] Configure GitHub branch protection rules
   - [ ] Require CI passes before merge
-  - **Status**: TODO (blocked by M3)
+  - **Status**: ⏳ NEXT
 
 ---
 
@@ -145,7 +147,7 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
 - **M4**: Linux Build Pipeline ✅
 
 ### 🔄 **NEXT IMMEDIATE TASK**
-**M5.1**: Add smoke-tests for platform dispatch and enable CI quality gates
+**M5.2**: Enable branch protection rules to enforce CI quality gates
 
 ### 🏆 **Major Achievements**
 - ✅ Platform abstraction working correctly
@@ -158,6 +160,7 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
 - ✅ **Linux build pipeline with PyInstaller**
 - ✅ **47MB standalone executable generated**
 - ✅ **Complete CI/CD for both Android APKs and Linux binaries**
+- ✅ **Comprehensive testing infrastructure with 31 passing tests**
 
 ### ⚠️ **Known Issues**
 - 🟡 pyjnius Python 3.13 compatibility (documented, not blocking)
@@ -167,7 +170,7 @@ python_version: "3.13.5"              # Currently using (3.11 planned for produc
 
 ## 🔧 **Ready to Continue**
 
-Outstanding progress! **5 out of 6 milestones completed** 🎉🚀
+Outstanding progress! **M5.1 completed - almost there!** 🎉🚀
 
 Your application now has:
 - ✅ **Working desktop build** (fully functional)
@@ -177,8 +180,8 @@ Your application now has:
 - ✅ **Modern dependency management** (UV with optional dependencies)
 - ✅ **Automated builds for both platforms**
 
-**Almost finished!** Only M5 (testing) and M6 (merge & release) remain!
+**Almost finished!** Only M5.2 (branch protection) and M6 (merge & release) remain!
 
-**Next Step**: M5.1 - Add smoke-tests for platform dispatch
+**Next Step**: M5.2 - Enable branch protection rules
 
-**Next Command**: Start M5.1 testing setup for final quality gates 
+**Next Command**: Set up GitHub branch protection for quality gates 
