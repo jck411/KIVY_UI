@@ -1,0 +1,56 @@
+name: android-build
+
+on:
+  push:
+    branches: [android]
+  workflow_dispatch: {}
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python for testing
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        
+    - name: Install UV package manager
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        
+    - name: Install dependencies for testing
+      run: |
+        uv sync --extra dev
+        
+    - name: Run smoke tests
+      run: |
+        uv run python -m pytest tests/ -v
+      
+    - name: Build Android APK
+      uses: digreatbrian/buildozer-action@v2
+      with:
+        python-version: "3.11"
+        buildozer-cmd: "buildozer -v android debug"
+        
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: KivyChatUI.apk
+        path: bin/*.apk
+        if-no-files-found: error
+        retention-days: 30
+        
+    - name: Upload build logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-logs
+        path: |
+          .buildozer/
+          *.log
+        retention-days: 7 
