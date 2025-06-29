@@ -2,6 +2,9 @@
 
 from kivy.utils import platform as _platform
 
+# Expose the detected platform
+PLATFORM = _platform
+
 if _platform == "linux":
     from . import desktop as impl
 elif _platform == "android":
@@ -9,4 +12,5 @@ elif _platform == "android":
 else:
     raise ImportError(f"Unsupported platform: {_platform}")
 
-__all__ = ["impl"] 
+# Expose common interface
+__all__ = ["PLATFORM", "impl"] 

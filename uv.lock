@@ -307,11 +307,18 @@ dependencies = [
     { name = "kivy" },
     { name = "kivymd" },
     { name = "pip" },
+    { name = "plyer" },
     { name = "setuptools" },
     { name = "websockets" },
 ]
 
 [package.optional-dependencies]
+android = [
+    { name = "pyjnius" },
+]
+desktop = [
+    { name = "plyer" },
+]
 dev = [
     { name = "black" },
     { name = "pytest" },
@@ -334,12 +341,15 @@ requires-dist = [
     { name = "kivy", specifier = "==2.3.1" },
     { name = "kivymd", git = "https://github.com/kivymd/KivyMD.git?branch=master" },
     { name = "pip", specifier = ">=25.1.1" },
+    { name = "plyer", specifier = ">=2.1.0" },
+    { name = "plyer", marker = "extra == 'desktop'" },
+    { name = "pyjnius", marker = "extra == 'android'" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.4" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.25.0" },
     { name = "setuptools", specifier = ">=80.9.0" },
     { name = "websockets", specifier = "==13.1" },
 ]
-provides-extras = ["dev"]
+provides-extras = ["android", "desktop", "dev"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -493,6 +503,15 @@ wheels = [
 ]
 
 [[package]]
+name = "plyer"
+version = "2.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/20/85/f61425aa9be1f9108eec1c13861c1e11c9a04eb786eb4832a8f7188317df/plyer-2.1.0.tar.gz", hash = "sha256:65b7dfb7e11e07af37a8487eb2aa69524276ef70dad500b07228ce64736baa61", size = 121371, upload-time = "2022-11-12T13:36:48.978Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d3/89/a41c2643fc8eabeb84791acb9d0e4d139b1e4b53473cc4dae947b5fa33ed/plyer-2.1.0-py2.py3-none-any.whl", hash = "sha256:1b1772060df8b3045ed4f08231690ec8f7de30f5a004aa1724665a9074eed113", size = 142266, upload-time = "2022-11-12T13:36:47.181Z" },
+]
+
+[[package]]
 name = "ptyprocess"
 version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
@@ -508,6 +527,26 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/b0/77/a5b8c569bf593b0140bde72ea885a803b82086995367bf2037de0159d924/pygments-2.19.2.tar.gz", hash = "sha256:636cb2477cec7f8952536970bc533bc43743542f70392ae026374600add5b887", size = 4968631, upload-time = "2025-06-21T13:39:12.283Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c7/21/705964c7812476f378728bdf590ca4b771ec72385c533964653c68e86bdc/pygments-2.19.2-py3-none-any.whl", hash = "sha256:86540386c03d588bb81d44bc3928634ff26449851e99741617ecb9037ee5ec0b", size = 1225217, upload-time = "2025-06-21T13:39:07.939Z" },
+]
+
+[[package]]
+name = "pyjnius"
+version = "1.6.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/19/e2/16d924821ccc31320f1f2bde7c2c59245a1a5033f69525dd5d2a1a7c953b/pyjnius-1.6.1.tar.gz", hash = "sha256:d2a7ece6ed79bf1d7f97a4f6d61302d9f1d7652182a3e4c8a69dbaef31396e60", size = 63420, upload-time = "2023-11-06T12:50:34.528Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/99/61/b7de6f3d95e226383c3eee2f8a1c0ebdfac5ccfbf5ffbb5f012ab0e59a4d/pyjnius-1.6.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:2fc1ff1dc5dc93ee0adcb0a3f9194d9a824aeacefb0ee738c6d121964c6585f2", size = 514721, upload-time = "2023-11-06T12:49:20.354Z" },
+    { url = "https://files.pythonhosted.org/packages/4d/f0/d581fb235053875cc575532336e8f013601d467e1ef99b28ed3cde24b63c/pyjnius-1.6.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:4359f42d907f8b971a676f2d1406ce41b1ba3c810c5770d640037d4addc5176e", size = 278240, upload-time = "2023-11-06T12:49:22.275Z" },
+    { url = "https://files.pythonhosted.org/packages/6f/07/e9e8a062ff3dbdd13a61a9ae82aab57ddc4ab5bd976268c8791a6638b26e/pyjnius-1.6.1-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:88dcb79d0ebc80ab74c1e6d37a0ffc9139521ff12eff1d5b2219be199f65536a", size = 1607566, upload-time = "2023-11-06T12:49:24.326Z" },
+    { url = "https://files.pythonhosted.org/packages/4b/e5/cdfd7dc6e26aa858e9d01c9d2b11e9c6f524d7e0a334693eaecbcce37102/pyjnius-1.6.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0a32df745d40fd80c0c6e6c12417fa86d435ac23c1236d030365cababcf9981d", size = 1637733, upload-time = "2023-11-06T12:49:26.207Z" },
+    { url = "https://files.pythonhosted.org/packages/9e/d5/565d57d4532e51981787c3cb30c681c70abd9dee669246cc5375e461b290/pyjnius-1.6.1-cp311-cp311-win32.whl", hash = "sha256:c55837b1eaef929c2b1721388bdb51290893766e11442ed611776701c9266f15", size = 191867, upload-time = "2023-11-06T12:49:28.294Z" },
+    { url = "https://files.pythonhosted.org/packages/76/7f/2d5d17008d801739a366effef1f9b8245a54b50adbbd804d70005aa7e5e1/pyjnius-1.6.1-cp311-cp311-win_amd64.whl", hash = "sha256:97b8c8faf16a4f1ac82cc89ca59c65a43d6a796b92884540c5627db2e54a962a", size = 224300, upload-time = "2023-11-06T12:49:29.798Z" },
+    { url = "https://files.pythonhosted.org/packages/bc/67/f39d53248fcc3a01d9958788185519042094c48e9392aa7746024b5eef6a/pyjnius-1.6.1-cp312-cp312-macosx_10_9_universal2.whl", hash = "sha256:8e77043544febb3a37e5498477755195d7538b47b63b1d62a9ee7060ff0d8697", size = 517420, upload-time = "2023-11-06T12:49:31.546Z" },
+    { url = "https://files.pythonhosted.org/packages/49/5c/a2c61dfa54779ca16b2879f23a981fb68088f93e2c16ba245e41ff04c5d7/pyjnius-1.6.1-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:9f3775bda5275773b3e27a682220ddb8a9c649ab097c85798a366e7d4b8b709b", size = 277858, upload-time = "2023-11-06T12:49:33.17Z" },
+    { url = "https://files.pythonhosted.org/packages/4e/3d/345b4a475d28f6cfea3d6058ad8a2682b4eb39cfe52611193d300d3d4766/pyjnius-1.6.1-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:e5cb3fb92898d6f2a1eeff348b71e80c001ef8594682273d45ca7b629877efda", size = 1582639, upload-time = "2023-11-06T12:49:34.753Z" },
+    { url = "https://files.pythonhosted.org/packages/72/67/33113063363569f69a79a302111470c7a00c62700987a5c723d125b867b7/pyjnius-1.6.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a90b68fb53c4f9a0d1919903deed3bf5def72c355e38c5c07f545e72001d1c4c", size = 1629302, upload-time = "2023-11-06T12:49:36.328Z" },
+    { url = "https://files.pythonhosted.org/packages/f9/3d/80f050f99e978fe1db917fb94e4b9a3f929cf9628416d7d7f5e62527fc60/pyjnius-1.6.1-cp312-cp312-win32.whl", hash = "sha256:7199809fd3114db4942e560ac000ed8ecc4cdf2e115ef551012cd3d0b1af3a0a", size = 194920, upload-time = "2023-11-06T12:49:38.039Z" },
+    { url = "https://files.pythonhosted.org/packages/c8/c7/a8911d31ae655d54ed80bac987349d4580a78c915caf098cd76ea2b67632/pyjnius-1.6.1-cp312-cp312-win_amd64.whl", hash = "sha256:0e0da04b08c61c2b59cd1670d743c7867f31d6c6a45c8ca5f90657da88d48fd9", size = 223781, upload-time = "2023-11-06T12:49:39.76Z" },
 ]
 
 [[package]]

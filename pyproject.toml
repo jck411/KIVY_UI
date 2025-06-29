@@ -12,12 +12,19 @@ dependencies = [
     "setuptools>=80.9.0",
     "pip>=25.1.1",
     "buildozer==1.5.0",
+    "plyer>=2.1.0",
 ]
 requires-python = ">=3.11"
 readme = "README.md"
 license = {text = "MIT"}
 
 [project.optional-dependencies]
+android = [
+    "pyjnius",
+]
+desktop = [
+    "plyer",
+]
 dev = [
     "black>=25.1.0",
     "pytest>=8.3.4",
