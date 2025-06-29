@@ -103,4 +103,17 @@ def open_file_manager(path: Optional[Path] = None) -> bool:
         )
         return True
     except (FileNotFoundError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
+        return False
+
+
+def open_url(url: str) -> bool:
+    """Open URL in default browser."""
+    try:
+        subprocess.run(
+            ["xdg-open", url],
+            timeout=5,
+            check=True
+        )
+        return True
+    except (FileNotFoundError, subprocess.CalledProcessError, subprocess.TimeoutExpired):
         return False 

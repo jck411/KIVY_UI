@@ -13,6 +13,24 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: Set up Python for testing
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        
+    - name: Install UV package manager
+      run: |
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        
+    - name: Install dependencies for testing
+      run: |
+        uv sync --extra dev
+        
+    - name: Run smoke tests
+      run: |
+        uv run python -m pytest tests/ -v
+      
     - name: Build Android APK
       uses: digreatbrian/buildozer-action@v2
       with:
