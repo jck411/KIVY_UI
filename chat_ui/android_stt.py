@@ -9,6 +9,10 @@ try:
     ANDROID_AVAILABLE = True
 except ImportError:
     ANDROID_AVAILABLE = False
+    # Create a no-op decorator for desktop
+    def run_on_ui_thread(func):
+        """No-op decorator for non-Android platforms"""
+        return func
 
 if ANDROID_AVAILABLE:
     # Java classes
