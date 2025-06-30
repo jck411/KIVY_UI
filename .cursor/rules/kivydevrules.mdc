@@ -1,9 +1,9 @@
-**KIVY\_UI — Project Development Rules**
-
-> **Audience:** LLM agents (and humans) who contribute code or configuration to this repo.
-> **Purpose:** Guarantee that Linux **and** Android builds stay green, reproducible, and easy to iterate on.
-
 ---
+description: 
+globs: 
+alwaysApply: true
+---
+
 
 ### 1 · Repository Anatomy
 

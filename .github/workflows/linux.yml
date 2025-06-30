@@ -8,6 +8,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      KIVY_NO_ARGS: "1"
+      KIVY_NO_CONSOLELOG: "1"
+      KIVY_WINDOW: "mock"
+      KIVY_GL_BACKEND: "mock"
+      DISPLAY: ":99"
+      XAUTHORITY: "/tmp/.Xauthority"
     
     steps:
     - name: Checkout code
@@ -35,10 +42,6 @@ jobs:
         
     - name: Configure headless environment for Kivy
       run: |
-        export KIVY_NO_ARGS=1
-        export KIVY_NO_CONSOLELOG=1
-        export DISPLAY=:99
-        export XAUTHORITY=/tmp/.Xauthority
         sudo apt-get install -y xvfb
         Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
         sleep 3  # Wait for X server to start
