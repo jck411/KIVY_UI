@@ -32,11 +32,15 @@ jobs:
       run: |
         uv run python -m pytest tests/ -v
       
-    - name: Build Android APK
-      uses: digreatbrian/buildozer-action@v2
+    - name: Build Android APK with retry
+      uses: Wandalen/wretry.action@v3.8.0
       with:
-        python-version: "3.11"
-        buildozer-cmd: "buildozer -v android debug"
+        action: digreatbrian/buildozer-action@v2
+        with: |
+          python-version: "3.11"
+          buildozer-cmd: "buildozer -v android debug"
+        attempt_limit: 3
+        attempt_delay: 30000
         
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
