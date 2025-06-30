@@ -8,6 +8,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      KIVY_NO_ARGS: "1"
+      KIVY_NO_CONSOLELOG: "1"
+      KIVY_WINDOW: "mock"
+      KIVY_GL_BACKEND: "mock"
+      KIVY_DPI: "96"
+      KIVY_METRICS_DENSITY: "1"
+      DISPLAY: ":99"
+      XAUTHORITY: "/tmp/.Xauthority"
     
     steps:
     - name: Checkout code
@@ -33,13 +42,45 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y xclip xsel
         
+    - name: Configure headless environment for Kivy
+      run: |
+        sudo apt-get install -y xvfb
+        Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        sleep 3  # Wait for X server to start
+        
     - name: Run smoke tests
       run: |
-        uv run python -m pytest tests/ -v
+        xvfb-run -a uv run python -m pytest tests/ -v
         
-    - name: Create PyInstaller spec
+    - name: Create PyInstaller spec and Kivy hook
       run: |
         uv run python scripts/create_pyinstaller_spec.py
+        
+    - name: Create Kivy runtime hook
+      run: |
+        mkdir -p scripts
+        cat > scripts/kivy_hook.py << 'EOF'
+        import os
+        import sys
+
+        # Configure Kivy before any imports
+        os.environ["KIVY_NO_ARGS"] = "1"
+        os.environ["KIVY_NO_CONSOLELOG"] = "1"
+        os.environ["KIVY_GL_BACKEND"] = "mock"
+        os.environ["KIVY_WINDOW"] = "mock"
+        os.environ["KIVY_DPI"] = "96"
+        os.environ["KIVY_METRICS_DENSITY"] = "1"
+
+        # Initialize metrics before KivyMD imports
+        from kivy.metrics import Metrics
+        Metrics.density = 1
+        Metrics.dpi = 96
+
+        # Prevent window creation during import
+        from kivy.base import EventLoop
+        def dummy_ensure_window(*args, **kwargs): pass
+        EventLoop.ensure_window = dummy_ensure_window
+        EOF
         
     - name: Build Linux executable
       run: |

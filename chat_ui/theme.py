@@ -3,9 +3,28 @@ Theme constants for consistent styling across the chat UI
 Optimized for production use with type hints and better organization
 """
 from typing import List, Union
-from kivy.metrics import dp
+from kivy.metrics import dp, sp, Metrics
 from kivy.utils import get_color_from_hex
 
+# Ensure metrics system is initialized with fallback values
+if not hasattr(Metrics, 'density') or Metrics.density is None:
+    Metrics.density = 1
+if not hasattr(Metrics, 'dpi') or Metrics.dpi is None:
+    Metrics.dpi = 96
+
+def safe_dp(value: Union[int, float]) -> float:
+    """Safely convert value to dp with fallback"""
+    try:
+        return dp(value)
+    except (TypeError, ValueError):
+        return float(value)
+
+def safe_sp(value: Union[int, float]) -> float:
+    """Safely convert value to sp with fallback"""
+    try:
+        return sp(value)
+    except (TypeError, ValueError):
+        return float(value)
 
 class Colors:
     """Color palette for the chat interface with KivyMD 2.0+ compatibility"""
@@ -35,11 +54,11 @@ class Colors:
 
 class Sizes:
     """Size constants for UI elements in device-independent pixels"""
-    BUBBLE_RADIUS = dp(20)
-    HEADER_HEIGHT = dp(60)
-    INPUT_HEIGHT = dp(80)
-    BUTTON_SIZE = dp(48)
-    AVATAR_SIZE = dp(40)
+    BUBBLE_RADIUS = safe_dp(20)
+    HEADER_HEIGHT = safe_dp(60)
+    INPUT_HEIGHT = safe_dp(80)
+    BUTTON_SIZE = safe_dp(48)
+    AVATAR_SIZE = safe_dp(40)
     
     # Text sizes (using sp for scalable pixels)
     TITLE_FONT = "18sp"
@@ -49,9 +68,9 @@ class Sizes:
 
 class Spacing:
     """Spacing constants for consistent layout margins and padding"""
-    SMALL = dp(12)
-    MEDIUM = dp(16)
-    LARGE = dp(20)
+    SMALL = safe_dp(12)
+    MEDIUM = safe_dp(16)
+    LARGE = safe_dp(20)
 
 
 class Layout:
@@ -60,4 +79,4 @@ class Layout:
     AI_BUBBLE_WIDTH: float = 0.85
     USER_BUBBLE_POS = {"right": 0.95}
     AI_BUBBLE_POS = {"x": 0.05}
-    SCROLL_BAR_WIDTH = dp(4) 
+    SCROLL_BAR_WIDTH = safe_dp(4) 

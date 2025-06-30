@@ -1,0 +1,3 @@
+{
+    "ignore": ["chat_ui/android_stt.py"]
+} 

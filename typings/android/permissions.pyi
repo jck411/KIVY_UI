@@ -1,0 +1,6 @@
+"""Type stubs for android.permissions module"""
+
+from typing import Any
+
+def request_permissions(*args: Any, **kwargs: Any) -> Any: ...
+def check_permission(*args: Any, **kwargs: Any) -> bool: ... 
