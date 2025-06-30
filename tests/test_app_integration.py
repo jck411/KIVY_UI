@@ -9,19 +9,29 @@ import os
 os.environ["KIVY_WINDOW"] = "mock"
 os.environ["KIVY_GL_BACKEND"] = "mock"
 os.environ["KIVY_METRICS_DENSITY"] = "1"
+os.environ["KIVY_DPI"] = "96"  # Standard desktop DPI
 os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
+
+# Initialize Kivy's metrics system before any other imports
+from kivy.metrics import Metrics
+Metrics.density = 1
+Metrics.dpi = 96
 
 import pytest
 import sys
 from unittest.mock import patch, MagicMock
 
-# Import Window early to configure it
+# Import and configure Window early
 from kivy.core.window import Window
 if Window:
     Window.size = (800, 600)
     Window.left = 0
     Window.top = 0
+
+# Initialize EventLoop to prevent Window creation issues
+from kivy.base import EventLoop
+EventLoop.ensure_window = lambda *args, **kwargs: None
 
 
 class TestCoreImports:
