@@ -9,6 +9,7 @@ jobs:
   apk:
     # Use Ubuntu 22.04 to avoid libtinfo5 package issues in Ubuntu 24.04
     runs-on: ubuntu-22.04
+    timeout-minutes: 45
     
     steps:
     - name: Checkout code
@@ -32,35 +33,18 @@ jobs:
       run: |
         uv run python -m pytest tests/ -v
         
-    - name: Build with Buildozer (with retry)
-      run: |
-        # Simple retry mechanism for network issues
-        for attempt in 1 2 3; do
-          echo "Build attempt $attempt/3"
-          if timeout 1800 docker run --rm -v "$PWD":/app -w /app \
-            -e ANDROID_ACCEPT_SDK_LICENSE=True \
-            kivy/buildozer:latest \
-            buildozer android debug; then
-            echo "Build successful on attempt $attempt"
-            break
-          else
-            exit_code=$?
-            if [ $attempt -eq 3 ]; then
-              echo "Build failed after 3 attempts"
-              exit $exit_code
-            else
-              echo "Build attempt $attempt failed, retrying in 30 seconds..."
-              sleep 30
-            fi
-          fi
-        done
+    - name: Build APK with Buildozer Action
+      uses: digreatbrian/buildozer-action@v2
+      with:
+        workdir: .
+        buildozer_version: master
         
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
+      if: success()
       with:
         name: android-apk
         path: bin/*.apk
-        if-no-files-found: error
         retention-days: 30
         
     - name: Upload build logs
