@@ -4,9 +4,24 @@ Integration tests for the main application.
 Tests that core application components can be imported and initialized correctly.
 """
 
+import os
+# Configure Kivy environment before any imports
+os.environ["KIVY_WINDOW"] = "mock"
+os.environ["KIVY_GL_BACKEND"] = "mock"
+os.environ["KIVY_METRICS_DENSITY"] = "1"
+os.environ["KIVY_NO_ARGS"] = "1"
+os.environ["KIVY_NO_CONSOLELOG"] = "1"
+
 import pytest
 import sys
 from unittest.mock import patch, MagicMock
+
+# Import Window early to configure it
+from kivy.core.window import Window
+if Window:
+    Window.size = (800, 600)
+    Window.left = 0
+    Window.top = 0
 
 
 class TestCoreImports:
@@ -45,6 +60,16 @@ class TestCoreImports:
 
 class TestKivyMDIntegration:
     """Test KivyMD framework integration."""
+    
+    @pytest.fixture(autouse=True)
+    def setup_window(self):
+        """Setup Window configuration for each test"""
+        with patch('kivy.core.window.Window') as mock_window:
+            mock_window.width = 800
+            mock_window.height = 600
+            mock_window.left = 0
+            mock_window.top = 0
+            yield mock_window
     
     def test_kivymd_app_import(self):
         """Test that KivyMD app components can be imported."""
