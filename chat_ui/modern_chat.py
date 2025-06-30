@@ -71,14 +71,11 @@ class ModernBubble(MDCard):
             theme_text_color="Custom",
             text_color=text_color,
             font_size=Sizes.MESSAGE_FONT,
-            adaptive_height=True,
+            size_hint_y=None,
             text_size=(dp(300), None),
             markup=True
         )
-        # Ensure label doesn't intercept touch events
-        self.label.bind(on_touch_down=lambda *args: False)
-        self.label.bind(on_touch_move=lambda *args: False)
-        self.label.bind(on_touch_up=lambda *args: False)
+        self.label.bind(texture_size=lambda instance, value: setattr(instance, 'height', value[1]))
         self.add_widget(self.label)
     
     def on_touch_down(self, touch):
@@ -217,16 +214,18 @@ class ModernChatScreen(MDScreen):
         # Messages container with scrolling
         self.messages = MDBoxLayout(
             orientation="vertical",
-            adaptive_height=True,
+            size_hint_y=None,
             spacing=Spacing.MEDIUM,
             padding=[Spacing.LARGE, Spacing.LARGE]
         )
+        self.messages.bind(minimum_height=self.messages.setter('height'))
         
         self.scroll_view = MDScrollView(
             do_scroll_x=False,
             do_scroll_y=True,
             scroll_type=['bars', 'content'],
-            bar_width=Layout.SCROLL_BAR_WIDTH
+            bar_width=Layout.SCROLL_BAR_WIDTH,
+            always_overscroll=False  # Prevent overscroll bouncing
         )
         self.scroll_view.add_widget(self.messages)
         
@@ -377,7 +376,10 @@ class ModernChatScreen(MDScreen):
     
     def _do_scroll(self):
         """Perform the actual scroll operation"""
-        self.scroll_view.scroll_y = 0
+        if self.messages.children:
+            # Scroll to the newest message (first child, since Kivy reverses order)
+            newest_message = self.messages.children[0]
+            self.scroll_view.scroll_to(newest_message)
     
     def _do_throttled_scroll(self, dt):
         """Perform scheduled throttled scroll"""

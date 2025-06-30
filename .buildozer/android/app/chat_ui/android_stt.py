@@ -9,6 +9,10 @@ try:
     ANDROID_AVAILABLE = True
 except ImportError:
     ANDROID_AVAILABLE = False
+    # Create dummy decorator for non-Android platforms
+    def run_on_ui_thread(func):
+        """Dummy decorator for non-Android platforms"""
+        return func
 
 if ANDROID_AVAILABLE:
     # Java classes

@@ -15,6 +15,8 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.button import MDFabButton
 from kivymd.uix.scrollview import MDScrollView
+from kivy.core.clipboard import Clipboard
+from kivy.logger import Logger
 
 from chat_ui.websocket_client import ChatWebSocketClient, ConnectionState
 from chat_ui.theme import Colors, Sizes, Spacing, Layout
@@ -32,15 +34,24 @@ except ImportError:
 
 
 class ModernBubble(MDCard):
-    """Chat message bubble with optimized styling"""
+    """Chat message bubble with optimized styling, scroll-through touch handling, and copy functionality"""
     
     def __init__(self, text, is_user=False, **kwargs):
         super().__init__(**kwargs)
+        self.bubble_text = text  # Store the original text for copying
+        self.is_user = is_user
         self.elevation = 0 if is_user else 1
         self.radius = [Sizes.BUBBLE_RADIUS]
         self.size_hint_y = None
         self.adaptive_height = True
         self.padding = [Spacing.MEDIUM, Spacing.SMALL]
+        
+        # Long press detection variables
+        self.touch_start_time = 0
+        self.long_press_threshold = 0.8  # seconds
+        self.long_press_triggered = False
+        self.touch_start_pos = None
+        self.long_press_event = None
         
         if is_user:
             self.theme_bg_color = "Custom"  # Required for KivyMD 2.0+
@@ -64,10 +75,86 @@ class ModernBubble(MDCard):
             text_size=(dp(300), None),
             markup=True
         )
+        # Ensure label doesn't intercept touch events
+        self.label.bind(on_touch_down=lambda *args: False)
+        self.label.bind(on_touch_move=lambda *args: False)
+        self.label.bind(on_touch_up=lambda *args: False)
         self.add_widget(self.label)
+    
+    def on_touch_down(self, touch):
+        """Handle touch down for long press detection and scroll pass-through"""
+        if self.collide_point(*touch.pos):
+            # Start long press detection
+            self.touch_start_time = time.time()
+            self.touch_start_pos = touch.pos
+            self.long_press_triggered = False
+            
+            # Schedule long press check
+            self.long_press_event = Clock.schedule_once(self._check_long_press, self.long_press_threshold)
+            
+            # Don't consume the touch - let it propagate to the scroll view
+            return False
+        return super().on_touch_down(touch)
+    
+    def on_touch_move(self, touch):
+        """Handle touch move - cancel long press if moved too far"""
+        if self.long_press_event and self.touch_start_pos:
+            # Cancel long press if touch moved too far
+            distance = ((touch.pos[0] - self.touch_start_pos[0]) ** 2 + 
+                       (touch.pos[1] - self.touch_start_pos[1]) ** 2) ** 0.5
+            if distance > dp(20):  # 20dp threshold for movement
+                self._cancel_long_press()
+        
+        # Always let touch move events propagate for scrolling
+        return False
+    
+    def on_touch_up(self, touch):
+        """Handle touch up - cancel long press if not triggered"""
+        if self.long_press_event:
+            self._cancel_long_press()
+        
+        # Always let touch up events propagate
+        return False
+    
+    def _check_long_press(self, dt):
+        """Check if long press should be triggered"""
+        if not self.long_press_triggered:
+            self.long_press_triggered = True
+            self._copy_text()
+    
+    def _cancel_long_press(self):
+        """Cancel the long press event"""
+        if self.long_press_event:
+            self.long_press_event.cancel()
+            self.long_press_event = None
+    
+    def _copy_text(self):
+        """Copy the bubble text to clipboard and show feedback"""
+        try:
+            # Copy text to clipboard
+            Clipboard.copy(self.bubble_text)
+            
+            # Show visual feedback with flash
+            self._flash_bubble()
+            
+            Logger.info(f"ModernBubble: Copied text to clipboard: {self.bubble_text[:50]}...")
+            
+        except Exception as e:
+            Logger.error(f"ModernBubble: Failed to copy text: {e}")
+    
+    def _flash_bubble(self):
+        """Flash the bubble color as feedback for successful copy"""
+        original_color = self.md_bg_color[:]
+        
+        # Flash to a bright green color to indicate success
+        flash_color = [0.2, 0.8, 0.2, 1.0]  # Bright green
+        
+        self.md_bg_color = flash_color
+        Clock.schedule_once(lambda dt: setattr(self, 'md_bg_color', original_color), 0.3)
     
     def update_text(self, text):
         """Update bubble text content"""
+        self.bubble_text = text
         self.label.text = text
 
 

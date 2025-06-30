@@ -1,3 +1,2 @@
-\
-websockets==13.1
 https://github.com/kivymd/kivymd/archive/master.zip
+setuptools>=80.9.0
