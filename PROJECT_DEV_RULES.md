@@ -5,6 +5,49 @@
 
 ---
 
+### 0 · ENVIRONMENT SETUP (CRITICAL - READ FIRST!)
+
+**The Problem:** buildozer is installed in a virtual environment and PATH issues cause "command not found" errors.
+
+**The Solution:** ALWAYS use the full path or ensure proper activation.
+
+#### Method 1: Direct Path (ALWAYS WORKS)
+```bash
+# Build Android app
+.venv/bin/buildozer -v android debug deploy run logcat
+
+# Clean build
+.venv/bin/buildozer android clean
+```
+
+#### Method 2: Virtual Environment Activation (IF IT WORKS)
+```bash
+# Activate venv (check for (kivymd-chat-ui) prompt)
+source .venv/bin/activate
+
+# Verify buildozer is available
+which buildozer  # Should show: /home/human/AAREPOS/KIVY_UI/.venv/bin/buildozer
+
+# If the above works, then you can use:
+buildozer -v android debug deploy run logcat
+```
+
+#### Environment Troubleshooting
+```bash
+# Check if in venv
+echo $VIRTUAL_ENV  # Should show: /home/human/AAREPOS/KIVY_UI/.venv
+
+# Check if buildozer exists
+ls -la .venv/bin/buildozer  # Should show the executable
+
+# If buildozer missing, reinstall
+uv sync --extra dev --extra android
+```
+
+**RULE FOR AGENTS:** When buildozer fails with "command not found", ALWAYS use `.venv/bin/buildozer` directly.
+
+---
+
 ### 1 · Repository Anatomy
 
 The repository is organized into the following key paths:
@@ -156,7 +199,13 @@ Use the following commands during local development:
   uv run python main.py
   ```
 
-* **Android build + deploy (USB):**
+* **Android build + deploy (USB) - RECOMMENDED:**
+
+  ```
+  .venv/bin/buildozer -v android debug deploy run logcat
+  ```
+
+* **Android build + deploy (if venv activated):**
 
   ```
   buildozer -v android debug deploy run logcat
@@ -165,13 +214,15 @@ Use the following commands during local development:
 * **Clean Buildozer cache:**
 
   ```
-  buildozer android clean
+  .venv/bin/buildozer android clean
   ```
 
 * **Refresh CI builds:**
 
   * For desktop: `git push`
   * For android: `git push --set-upstream origin android`
+
+**IMPORTANT:** If you get "buildozer: command not found", use the `.venv/bin/buildozer` path directly.
 
 ---
 
