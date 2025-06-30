@@ -81,18 +81,51 @@ The repository is organized into the following key paths:
 Dependencies are managed in `pyproject.toml` as follows:
 
 ```toml
+[project]
+dependencies = [
+    # Core dependencies only - no dev or platform-specific packages
+    "kivy==2.3.1",
+    "websockets==13.1",
+]
+
 [project.optional-dependencies]
-android = ["pyjnius", "android_permissions"]
-desktop = ["plyer", "dbus-python"]
-dev     = ["black", "pytest", "buildozer"]
+android = ["pyjnius", "android_permissions"]  # Android-specific packages
+desktop = ["plyer", "dbus-python"]           # Desktop-specific packages
+dev = [
+    "black",
+    "pytest",
+    "buildozer[dev]",                        # Required for Android builds
+    "cython",                                # Required by buildozer
+]
 ```
 
-* **Rule:** Every new requirement **must** be added to `pyproject.toml` under the appropriate extra group (`android`, `desktop`, or `dev`).
-* **Agent Workflow:** Before running tests, always execute:
+**Critical Rules:**
 
-  ```
-  uv sync --extra dev --extra desktop
-  ```
+* Every requirement **must** be added to `pyproject.toml` under the appropriate section:
+  * Core dependencies → `[project.dependencies]`
+  * Platform-specific → `[project.optional-dependencies.android/desktop]`
+  * Development tools → `[project.optional-dependencies.dev]`
+
+* **Never** put development tools (buildozer, pytest, etc.) in `[project.dependencies]`
+* **Always** include version constraints for reproducible builds
+* **Avoid** duplicate dependency sections (e.g., don't use both `[tool.uv.dev-dependencies]` and `[project.optional-dependencies.dev]`)
+
+**Agent Workflow:**
+
+Before any development work:
+```bash
+# For desktop development
+uv sync --extra dev --extra desktop
+
+# For Android development
+uv sync --extra dev --extra android
+```
+
+**Buildozer Setup:**
+* Buildozer **must** be installed via the dev extras: `uv sync --extra dev`
+* Never install buildozer globally or via pip/poetry/conda
+* Always include both buildozer and cython in dev dependencies
+* If buildozer is not found after sync, check PATH includes `~/.local/bin`
 
 ---
 
@@ -202,7 +235,7 @@ Use the following commands during local development:
 
 * **`adb devices` shows *unauthorized*:**
 
-  * **Likely cause:** Phone didn’t accept the RSA key.
+  * **Likely cause:** Phone didn't accept the RSA key.
   * **Fix:** Replug the phone, accept the prompt, then run:
 
     ```
@@ -226,4 +259,4 @@ Use the following commands during local development:
 
 ---
 
-> **Remember:** The core engine (`chat_ui/`) never changes for the road—it’s the plug adaptor (`platform_utils/`) that swaps when you cross borders.
+> **Remember:** The core engine (`chat_ui/`) never changes for the road—it's the plug adaptor (`platform_utils/`) that swaps when you cross borders.
