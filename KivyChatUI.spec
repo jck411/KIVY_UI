@@ -42,21 +42,13 @@ if platform_utils_path.exists():
             rel_path = file_path.relative_to(project_root)
             platform_utils_data.append((str(file_path), str(rel_path.parent)))
 
-# Java files (for reference, not included in Linux build)
-java_data = []
-java_path = project_root / "java"
-if java_path.exists():
-    for file_path in java_path.rglob("*.java"):
-        if file_path.is_file():
-            rel_path = file_path.relative_to(project_root)
-            java_data.append((str(file_path), str(rel_path.parent)))
-
 # Combine all data files
-datas = kivymd_data + kivy_data + chat_ui_data + platform_utils_data + java_data
+datas = kivymd_data + kivy_data + chat_ui_data + platform_utils_data
 
 # Hidden imports for KivyMD and dependencies
 hiddenimports = [
     # Core Kivy modules
+    'kivy.core.window.window_sdl2',
     'kivy.core.window',
     'kivy.core.image',
     'kivy.core.clipboard',
@@ -117,6 +109,9 @@ hiddenimports = [
     'plyer.platforms.linux',
 ]
 
+# Runtime hooks
+kivy_hook = project_root / "scripts" / "kivy_hook.py"
+
 # PyInstaller Analysis
 a = Analysis(
     [main_script],
@@ -126,9 +121,8 @@ a = Analysis(
     hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
-    runtime_hooks=[],
+    runtime_hooks=[str(kivy_hook)],
     excludes=[
-        # Exclude unnecessary modules to reduce size
         'tkinter',
         'matplotlib',
         'numpy',
@@ -177,8 +171,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=None,  # Add icon path here if you have one
+    icon=None,
 )
-
-# Note: COLLECT section not needed for onefile builds
-# The EXE section above creates a single executable file
